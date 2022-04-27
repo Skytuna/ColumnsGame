@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\Goktuna\\Desktop\\pbl-final-setup\\Enigma-Edited2.jar"
+    ]
+}

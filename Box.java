@@ -1,0 +1,32 @@
+public class Box {
+    private boolean showTopCardValue = false;
+    private SingleLinkedList cards = new SingleLinkedList();
+
+    public Box() {
+        // Create a linked list that contains unsort cards
+        SingleLinkedList unsortedCardTypes = new SingleLinkedList();
+        for (int i = 0; i < 5; i++) {
+            for (int j = 1; j < 11; j++) {
+                unsortedCardTypes.add(j);
+            }
+        }
+
+        // Sort the unsorted cards list by
+        while (cards.size() < 50) {
+            int randomIndex = Utils.getRandomNumber(0, unsortedCardTypes.size() - 1);
+            int randomCardType = (int) unsortedCardTypes.getIndex(randomIndex);
+
+            Card newCard = new Card(randomCardType);
+            cards.add(newCard);
+        }
+    }
+
+    public boolean isShowTopCardValue() {
+        return this.showTopCardValue;
+    }
+
+    public void setShowTopCardValue(boolean showTopCardValue) {
+        this.showTopCardValue = showTopCardValue;
+    }
+
+}
