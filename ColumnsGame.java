@@ -7,14 +7,16 @@ public class ColumnsGame {
     private EnigmaExtended console = new EnigmaExtended();
 
     public ColumnsGame() {
-        
+        addSixCardsToEachColumn();
+        columns.printColumns();
     }
 
     private void addSixCardsToEachColumn() {
         // Add 6 six cards for each column initially
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 6; j++) {
-                // TODO: Add 6 cards for each column
+        for (int col = 1; col < 6; col++) {
+            for (int cardIndex = 0; cardIndex < 6; cardIndex++) {
+                Card card = box.getShownCard();
+                columns.addCardToColumn("C" + col, card);
             }
         }
     }

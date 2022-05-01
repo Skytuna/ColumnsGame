@@ -15,6 +15,7 @@ public class Box {
         while (cards.size() < 50) {
             int randomIndex = Utils.getRandomNumber(0, unsortedCardTypes.size() - 1);
             int randomCardType = (int) unsortedCardTypes.getIndex(randomIndex);
+            unsortedCardTypes.deleteIndex(randomIndex);
 
             Card newCard = new Card(randomCardType);
             cards.add(newCard);
@@ -29,4 +30,10 @@ public class Box {
         this.showTopCardValue = showTopCardValue;
     }
 
+    // Returns the card thats on top of the deck
+    public Card getShownCard() {
+        Card card = (Card) cards.getIndex(cards.size() - 1);
+        cards.deleteIndex(cards.size() - 1);
+        return card;
+    }
 }

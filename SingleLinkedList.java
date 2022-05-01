@@ -95,4 +95,28 @@ public class SingleLinkedList {
 
 		return tempNode.getData();
 	}
+
+	public void deleteIndex(int index) {
+		if (index > size() - 1) {
+			return;
+		}
+
+		if (index == 0) {
+			head = head.getLink();
+			return;
+		}
+
+		Node nextNode = head;
+		Node previousNode = null;
+		for (int i = 0; i < size(); i++) {
+			if (i == index) {
+				previousNode.setLink(nextNode.getLink());
+				nextNode = previousNode;
+				return;
+			}
+
+			previousNode = nextNode;
+			nextNode = nextNode.getLink();
+		}
+	}
 }
