@@ -21,7 +21,7 @@ public class Columns {
                 ChildNode child = data.getChildByIndex(parentIndex, childIndex);
                 Card card = (Card) child.getData();
                 String cardValue = String.valueOf(card.getValue());
-                console.setCursor(3 * parentIndex, childIndex + 3);
+                console.setCursor(4 * parentIndex, childIndex + 2);
                 console.print(cardValue);
             }
         }
