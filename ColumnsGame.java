@@ -12,6 +12,7 @@ public class ColumnsGame {
         // TODO: print these for each iteration
         printScore();
         printTransferCount();
+        printShownCard();
 
         addSixCardsToEachColumn();
         columns.printColumns();
@@ -37,6 +38,12 @@ public class ColumnsGame {
         String transferCountAsString = String.valueOf(transferCount);
         console.setCursor(40 - transferCountAsString.length(), 0);
         console.print(transferCountAsString);
+    }
+
+    private void printShownCard() {
+        String shownCardValue = String.valueOf(box.getShownCard().getValue());
+        console.setCursor(29, 6);
+        console.print(shownCardValue);
     }
 
     private void printStaticScreenElements() {
