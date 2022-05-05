@@ -2,6 +2,10 @@ public class Box {
     private boolean showTopCardValue = false;
     private SingleLinkedList cards = new SingleLinkedList();
 
+    public int getCardsSize() {
+return cards.size();
+    }
+
     public Box() {
         // Create a linked list that contains unsort cards
         SingleLinkedList unsortedCardTypes = new SingleLinkedList();
@@ -13,7 +17,7 @@ public class Box {
 
         // Sort the unsorted cards list by
         while (cards.size() < 50) {
-            int randomIndex = Utils.getRandomNumber(0, unsortedCardTypes.size() - 1);
+            int randomIndex = Utils.getRandomNumber(0, unsortedCardTypes.size());
             int randomCardType = (int) unsortedCardTypes.getIndex(randomIndex);
             unsortedCardTypes.deleteIndex(randomIndex);
 

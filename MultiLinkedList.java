@@ -75,7 +75,7 @@ public class MultiLinkedList {
         return temp;
     }
 
-    public Object getChildByIndex(int indexParent, int indexChild) {
+    public ChildNode getChildByIndex(int indexParent, int indexChild) {
         ParentNode parent = getParentByIndex(indexParent);
         ChildNode temp = parent.getNextChild();
         if(indexChild > parent.sizeChild() - 1)
