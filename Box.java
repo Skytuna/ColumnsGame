@@ -2,10 +2,6 @@ public class Box {
     private boolean showTopCardValue = false;
     private SingleLinkedList cards = new SingleLinkedList();
 
-    public int getCardsSize() {
-return cards.size();
-    }
-
     public Box() {
         // Create a linked list that contains unsort cards
         SingleLinkedList unsortedCardTypes = new SingleLinkedList();
@@ -39,5 +35,9 @@ return cards.size();
         Card card = (Card) cards.getIndex(cards.size() - 1);
         cards.deleteIndex(cards.size() - 1);
         return card;
+    }
+    
+    public int getCardsSize() {
+    	return cards.size();
     }
 }

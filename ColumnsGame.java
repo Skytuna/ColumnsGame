@@ -16,6 +16,7 @@ public class ColumnsGame {
 
         addSixCardsToEachColumn();
         columns.printColumns();
+        highScoreTable.printHighScore();
     }
 
     private void addSixCardsToEachColumn() {
