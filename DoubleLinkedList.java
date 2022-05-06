@@ -21,33 +21,39 @@ public class DoubleLinkedList {
 		tail = newNode;
 	}
 
-	public void add(String str) {
-		DoubleNode newNode = new DoubleNode(str);
+	public void add(Player newPlayer) {
+		DoubleNode newNode = new DoubleNode(newPlayer);
 		if (head == null && tail == null) {
 			head = newNode;
 			tail = newNode;
 			return;
 		}
 
-		if (str.compareTo((String) head.getData()) < 0) {
+		if (newPlayer.getScore() > ((Player)head.getData()).getScore()) {
 			newNode.setNext(head);
 			head.setPrev(newNode);
 			head = newNode;
 			return;
 		}
 
-		DoubleNode temp = head;
-		while (temp.getNext() != null && (str.compareTo((String) temp.getNext().getData()) >= 0)) {
+		DoubleNode temp = head.getNext();
+		while (temp != null) {
+			
+			if((newPlayer.getScore() > ((Player)temp.getData()).getScore()))
+			{
+				newNode.setNext(temp);
+				newNode.setPrev(temp.getPrev());
+				temp.getPrev().setNext(newNode);
+				temp.setPrev(newNode);
+				return;
+			}
+			
 			temp = temp.getNext();
 		}
-		newNode.setPrev(temp);
-		newNode.setNext(temp.getNext());
-		if (temp.getNext() != null) {
-			temp.getNext().setPrev(newNode);
-		} else {
-			tail = newNode;
-		}
-		temp.setNext(newNode);
+
+		newNode.setPrev(tail);
+		tail.setNext(newNode);
+		tail = newNode;
 	}
 
 	public void remove(int index) {
@@ -79,7 +85,6 @@ public class DoubleLinkedList {
 
 	public void display() {
 		if (head == null) {
-			System.out.println("linked list is empty");
 			return;
 		}
 
@@ -106,6 +111,19 @@ public class DoubleLinkedList {
 		return flag;
 	}
 
+    public DoubleNode getIndex(int index) {
+    	DoubleNode temp = head;
+        if (index > size() - 1) {
+            return null;
+        }
+
+        for (int i = 0; i < index; i++) {
+            temp = temp.getNext();
+        }
+
+        return temp;
+    }
+	
 	public int size() {
 		int count = 0;
 		DoubleNode temp = head;
