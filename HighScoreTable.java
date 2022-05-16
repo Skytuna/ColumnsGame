@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Scanner;
 
 public class HighScoreTable {
@@ -50,9 +51,8 @@ public class HighScoreTable {
 
     public void saveToFile() {
 
-        // TODO: turkish chars are scuffed ahahaha turks
         try {
-            FileWriter myWriter = new FileWriter("highscore.txt");
+            FileWriter myWriter = new FileWriter("highscore.txt", Charset.forName("utf-8"));
             for (int i = 0; i < data.size(); i++) {
                 Player currPlayer = (Player) data.getIndex(i).getData();
                 myWriter.write(currPlayer.getName() + "#" + currPlayer.getScore() + (i != data.size() - 1 ? "\n" : ""));
