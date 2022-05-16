@@ -58,4 +58,11 @@ public class EnigmaExtended {
     public void print(int x, int y, char text) {
         console.getTextWindow().output(x, y, text);
     }
+
+    public int isKeyPressed() {
+        if (keypr == 1)
+            return rkey;
+
+        return -1;
+    }
 }

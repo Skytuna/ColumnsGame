@@ -21,7 +21,11 @@ public class DoubleLinkedList {
 		tail = newNode;
 	}
 
-	public void add(Player newPlayer) {
+	/*
+	 * Takes a player as an argument.
+	 * Adds it to the list by its score.
+	 */
+	public void addPlayer(Player newPlayer) {
 		DoubleNode newNode = new DoubleNode(newPlayer);
 		if (head == null && tail == null) {
 			head = newNode;
@@ -29,7 +33,7 @@ public class DoubleLinkedList {
 			return;
 		}
 
-		if (newPlayer.getScore() > ((Player)head.getData()).getScore()) {
+		if (newPlayer.getScore() > ((Player) head.getData()).getScore()) {
 			newNode.setNext(head);
 			head.setPrev(newNode);
 			head = newNode;
@@ -38,16 +42,15 @@ public class DoubleLinkedList {
 
 		DoubleNode temp = head.getNext();
 		while (temp != null) {
-			
-			if((newPlayer.getScore() > ((Player)temp.getData()).getScore()))
-			{
+
+			if ((newPlayer.getScore() > ((Player) temp.getData()).getScore())) {
 				newNode.setNext(temp);
 				newNode.setPrev(temp.getPrev());
 				temp.getPrev().setNext(newNode);
 				temp.setPrev(newNode);
 				return;
 			}
-			
+
 			temp = temp.getNext();
 		}
 
@@ -111,19 +114,19 @@ public class DoubleLinkedList {
 		return flag;
 	}
 
-    public DoubleNode getIndex(int index) {
-    	DoubleNode temp = head;
-        if (index > size() - 1) {
-            return null;
-        }
+	public DoubleNode getIndex(int index) {
+		DoubleNode temp = head;
+		if (index > size() - 1) {
+			return null;
+		}
 
-        for (int i = 0; i < index; i++) {
-            temp = temp.getNext();
-        }
+		for (int i = 0; i < index; i++) {
+			temp = temp.getNext();
+		}
 
-        return temp;
-    }
-	
+		return temp;
+	}
+
 	public int size() {
 		int count = 0;
 		DoubleNode temp = head;

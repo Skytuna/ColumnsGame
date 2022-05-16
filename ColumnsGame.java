@@ -1,3 +1,5 @@
+import java.awt.event.KeyEvent;
+
 public class ColumnsGame {
     private int transferCount = 0;
     private int score = 0;
@@ -5,18 +7,40 @@ public class ColumnsGame {
     private Columns columns = new Columns();
     private HighScoreTable highScoreTable = new HighScoreTable();
     private EnigmaExtended console = new EnigmaExtended();
+    private boolean isGameRunning = true;
 
     public ColumnsGame() {
+        console.console.getTextWindow().addKeyListener(console.klis);
         printStaticScreenElements();
-
-        // TODO: print these for each iteration
-        printScore();
-        printTransferCount();
+        addSixCardsToEachColumn();
         printShownCard();
 
-        addSixCardsToEachColumn();
-        columns.printColumns();
+        while (isGameRunning) {
+            printScore();
+            printTransferCount();
+
+            columns.printColumns();
+
+            if (console.isKeyPressed() != -1) {
+                switch (console.rkey) {
+                    case KeyEvent.VK_E:
+                        isGameRunning = false;
+                        break;
+                }
+            }
+        }
+
+        console.clearConsole();
+        console.print("Game is over!\n");
+        console.print("Please enter your name:");
+        String playerName = console.console.readLine();
+
+        // Mock player
+        Player player = new Player(playerName, 243.2f);
+        highScoreTable.addNewPlayer(player);
+
         highScoreTable.printHighScore();
+        highScoreTable.saveToFile();
     }
 
     private void addSixCardsToEachColumn() {
@@ -42,6 +66,7 @@ public class ColumnsGame {
     }
 
     private void printShownCard() {
+        // TODO: Why the f get shown deletes a card???????????????
         String shownCardValue = String.valueOf(box.getShownCard().getValue());
         console.setCursor(29, 6);
         console.print(shownCardValue);

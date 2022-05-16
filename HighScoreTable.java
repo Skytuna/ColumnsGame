@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class HighScoreTable {
@@ -16,13 +18,12 @@ public class HighScoreTable {
         try {
             scanner = new Scanner(reader, "UTF-8");
             String currLine;
-            while(scanner.hasNextLine())
-            {
-            	currLine = scanner.nextLine();
+            while (scanner.hasNextLine()) {
+                currLine = scanner.nextLine();
                 String name = currLine.split("#")[0];
                 float score = Float.parseFloat(currLine.split("#")[1]);
                 Player newPlayer = new Player(name, score);
-                data.add(newPlayer);
+                data.addPlayer(newPlayer);
             }
 
             scanner.close();
@@ -30,22 +31,36 @@ public class HighScoreTable {
             e.printStackTrace();
         }
     }
-    
+
     public void printHighScore() {
-    	int length = data.size();
-    	for(int i = 0; i < length; i++)
-    	{
+        int length = data.size();
+        for (int i = 0; i < length; i++) {
             DoubleNode node = data.getIndex(i);
             Player player = (Player) node.getData();
             String name = player.getName();
             float score = player.getScore();
-            console.setCursor(2, 15 +i);
+            console.setCursor(2, 15 + i);
             console.print(name + " " + score);
-    	}
+        }
     }
-    
-    public void addNewPlayer(Player newPlayer)
-    {
-    	data.add(newPlayer);
+
+    public void addNewPlayer(Player newPlayer) {
+        data.addPlayer(newPlayer);
+    }
+
+    public void saveToFile() {
+
+        // TODO: turkish chars are scuffed ahahaha turks
+        try {
+            FileWriter myWriter = new FileWriter("highscore.txt");
+            for (int i = 0; i < data.size(); i++) {
+                Player currPlayer = (Player) data.getIndex(i).getData();
+                myWriter.write(currPlayer.getName() + "#" + currPlayer.getScore() + (i != data.size() - 1 ? "\n" : ""));
+            }
+            myWriter.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 }
