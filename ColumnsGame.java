@@ -96,12 +96,13 @@ public class ColumnsGame {
     }
 
     private void printShownCard() {
-        if (box.getShownCardState() == ShownStateEnum.CLOSED)
+        console.setCursor(29, 6);
+        if (box.getShownCardState() == ShownStateEnum.CLOSED) {
+            console.print("  ");
             return;
+        }
 
         String shownCardValue = String.valueOf(box.getShownCard().getValue());
-        console.setCursor(29, 6);
-
         if (box.getShownCardState() == ShownStateEnum.SELECTED) {
             console.print(shownCardValue, Colors.redColor);
             return;
@@ -148,6 +149,14 @@ public class ColumnsGame {
     }
 
     private void placeCardValidator() {
-        
+        Card lastCardOfColumn = columns.getLastCardOfColumn(selectedColumn);
+        Card selectedCard = box.getShownCard();
+
+        if (Math.abs(lastCardOfColumn.getValue() - selectedCard.getValue()) <= 1) {
+            box.popShownCard();
+            columns.addCardToColumn("C" + selectedColumn, selectedCard);
+            box.setShownCardState(ShownStateEnum.CLOSED);
+            transferCount++;
+        }
     }
 }

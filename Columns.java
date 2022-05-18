@@ -29,10 +29,10 @@ public class Columns {
 
     /**
      * 
-     * @param card
-     * @param column starts with 1-5
+     * @param column 1-5
+     * @return
      */
-    public void addCardToColumn(Card card, int column) {
-        
+    public Card getLastCardOfColumn(int column) {
+        return (Card) data.getChildByIndex(column - 1, data.getParentByIndex(column - 1).sizeChild() - 1).getData();
     }
 }
