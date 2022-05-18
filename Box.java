@@ -31,13 +31,18 @@ public class Box {
     }
 
     // Returns the card thats on top of the deck
-    public Card getShownCard() {
+    public Card popShownCard() {
         Card card = (Card) cards.getIndex(cards.size() - 1);
         cards.deleteIndex(cards.size() - 1);
         return card;
     }
-    
+
+    public Card getShownCard() {
+        Card card = (Card) cards.getIndex(cards.size() - 1);
+        return card;
+    }
+
     public int getCardsSize() {
-    	return cards.size();
+        return cards.size();
     }
 }

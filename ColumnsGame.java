@@ -47,7 +47,7 @@ public class ColumnsGame {
         // Add 6 six cards for each column initially
         for (int col = 1; col < 6; col++) {
             for (int cardIndex = 0; cardIndex < 6; cardIndex++) {
-                Card card = box.getShownCard();
+                Card card = box.popShownCard();
                 columns.addCardToColumn("C" + col, card);
             }
         }
@@ -66,7 +66,6 @@ public class ColumnsGame {
     }
 
     private void printShownCard() {
-        // TODO: Why the f get shown deletes a card???????????????
         String shownCardValue = String.valueOf(box.getShownCard().getValue());
         console.setCursor(29, 6);
         console.print(shownCardValue);
