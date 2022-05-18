@@ -1,3 +1,4 @@
+import enigma.console.TextAttributes;
 import enigma.core.Enigma;
 import enigma.event.TextMouseListener;
 import java.awt.event.KeyListener;
@@ -57,6 +58,10 @@ public class EnigmaExtended {
 
     public void print(int x, int y, char text) {
         console.getTextWindow().output(x, y, text);
+    }
+
+    public void print(String text, TextAttributes color) {
+        console.getTextWindow().output(text, color);
     }
 
     public int isKeyPressed() {

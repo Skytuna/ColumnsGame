@@ -1,5 +1,5 @@
 public class Box {
-    private boolean showTopCardValue = false;
+    private ShownStateEnum shownState = ShownStateEnum.CLOSED;
     private SingleLinkedList cards = new SingleLinkedList();
 
     public Box() {
@@ -22,12 +22,12 @@ public class Box {
         }
     }
 
-    public boolean isShowTopCardValue() {
-        return this.showTopCardValue;
+    public ShownStateEnum getShownCardState() {
+        return this.shownState;
     }
 
-    public void setShowTopCardValue(boolean showTopCardValue) {
-        this.showTopCardValue = showTopCardValue;
+    public void setShownCardState(ShownStateEnum newShownState) {
+        this.shownState = newShownState;
     }
 
     // Returns the card thats on top of the deck
@@ -44,5 +44,19 @@ public class Box {
 
     public int getCardsSize() {
         return cards.size();
+    }
+
+    public void toggleTopCard() {
+        switch (shownState) {
+            case CLOSED:
+                this.shownState = ShownStateEnum.OPENED;
+                break;
+            case OPENED:
+                this.shownState = ShownStateEnum.SELECTED;
+                break;
+            case SELECTED:
+                this.shownState = ShownStateEnum.OPENED;
+                break;
+        }
     }
 }

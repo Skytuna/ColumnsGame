@@ -26,4 +26,13 @@ public class Columns {
             }
         }
     }
+
+    /**
+     * 
+     * @param card
+     * @param column starts with 1-5
+     */
+    public void addCardToColumn(Card card, int column) {
+        
+    }
 }

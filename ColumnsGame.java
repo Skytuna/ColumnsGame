@@ -8,16 +8,18 @@ public class ColumnsGame {
     private HighScoreTable highScoreTable = new HighScoreTable();
     private EnigmaExtended console = new EnigmaExtended();
     private boolean isGameRunning = true;
+    private int selectedColumn = 0; // 0 means no selected column
 
     public ColumnsGame() {
         console.console.getTextWindow().addKeyListener(console.klis);
         printStaticScreenElements();
         addSixCardsToEachColumn();
-        printShownCard();
 
         while (isGameRunning) {
             printScore();
             printTransferCount();
+            printShownCard();
+            printColumnNames();
 
             columns.printColumns();
 
@@ -26,7 +28,35 @@ public class ColumnsGame {
                     case KeyEvent.VK_E:
                         isGameRunning = false;
                         break;
+                    case KeyEvent.VK_B:
+                        box.toggleTopCard();
+                        if (box.getShownCardState() == ShownStateEnum.SELECTED)
+                            selectedColumn = 1;
+                        break;
+                    case KeyEvent.VK_LEFT:
+                        if (selectedColumn == 1 || selectedColumn == 0)
+                            continue;
+                        selectedColumn--;
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        if (selectedColumn == 5 || selectedColumn == 0)
+                            continue;
+                        selectedColumn++;
+                        break;
+                    case KeyEvent.VK_UP:
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        break;
+                    case KeyEvent.VK_X:
+                        placeCardValidator();
+                        break;
                 }
+            }
+
+            try {
+                Thread.sleep(175);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
 
@@ -66,17 +96,21 @@ public class ColumnsGame {
     }
 
     private void printShownCard() {
+        if (box.getShownCardState() == ShownStateEnum.CLOSED)
+            return;
+
         String shownCardValue = String.valueOf(box.getShownCard().getValue());
         console.setCursor(29, 6);
+
+        if (box.getShownCardState() == ShownStateEnum.SELECTED) {
+            console.print(shownCardValue, Colors.redColor);
+            return;
+        }
+
         console.print(shownCardValue);
     }
 
     private void printStaticScreenElements() {
-        // column names
-        console.setCursor(0, 0);
-        for (int i = 1; i < 6; i++)
-            console.print("C" + i + "  ");
-
         // column indicators
         console.setCursor(0, 1);
         for (int i = 1; i < 6; i++)
@@ -99,5 +133,21 @@ public class ColumnsGame {
         console.print("|  |");
         console.setCursor(28, 7);
         console.print("+--+");
+    }
+
+    private void printColumnNames() {
+        console.setCursor(0, 0);
+        for (int i = 1; i < 6; i++) {
+            if (i == selectedColumn && box.getShownCardState() == ShownStateEnum.SELECTED) {
+                console.print("C" + i, Colors.orangeColor);
+                console.print("  ");
+                continue;
+            }
+            console.print("C" + i + "  ");
+        }
+    }
+
+    private void placeCardValidator() {
+        
     }
 }

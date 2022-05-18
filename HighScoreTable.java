@@ -1,7 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.Scanner;
 
@@ -52,7 +53,8 @@ public class HighScoreTable {
     public void saveToFile() {
 
         try {
-            FileWriter myWriter = new FileWriter("highscore.txt", Charset.forName("utf-8"));
+            OutputStreamWriter myWriter = new OutputStreamWriter(new FileOutputStream("highscore.txt"),
+                    Charset.forName("UTF-8").newEncoder());
             for (int i = 0; i < data.size(); i++) {
                 Player currPlayer = (Player) data.getIndex(i).getData();
                 myWriter.write(currPlayer.getName() + "#" + currPlayer.getScore() + (i != data.size() - 1 ? "\n" : ""));
