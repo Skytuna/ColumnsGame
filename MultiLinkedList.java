@@ -90,4 +90,11 @@ public class MultiLinkedList {
 
         return temp;
     }
+    
+    //TODO I guess
+    public void setChild(int parentIndex, int childIndex, Object child) {
+    	
+    	
+		
+	}
 }
