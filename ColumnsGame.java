@@ -14,6 +14,7 @@ public class ColumnsGame {
         console.console.getTextWindow().addKeyListener(console.klis);
         printStaticScreenElements();
         addSixCardsToEachColumn();
+        columns.getSlot(1, 1).setSelected(true);
 
         while (isGameRunning) {
             printScore();
@@ -22,7 +23,7 @@ public class ColumnsGame {
             printColumnNames();
 
             columns.printColumns();
-
+            
             if (console.isKeyPressed() != -1) {
                 switch (console.rkey) {
                     case KeyEvent.VK_E:
@@ -48,7 +49,16 @@ public class ColumnsGame {
                     case KeyEvent.VK_DOWN:
                         break;
                     case KeyEvent.VK_X:
-                        placeCardValidator();
+                    	if (box.getShownCardState() == ShownStateEnum.SELECTED)
+                    	{
+                    		boxCardValidator();
+                            break;
+                    	}
+                    	
+                    	
+                        break;
+                    case KeyEvent.VK_Z://TODO
+                    	columns.getSlot(selectedColumn, score);
                         break;
                 }
             }
@@ -148,11 +158,14 @@ public class ColumnsGame {
         }
     }
 
-    private void placeCardValidator() {
+    private void boxCardValidator() {
         Card lastCardOfColumn = columns.getLastCardOfColumn(selectedColumn);
         Card selectedCard = box.getShownCard();
 
-        if (Math.abs(lastCardOfColumn.getValue() - selectedCard.getValue()) <= 1) {
+        boolean isInRangeOne = lastCardOfColumn != null && (Math.abs(lastCardOfColumn.getValue() - selectedCard.getValue()) <= 1);
+        boolean emptyColumnCheck = lastCardOfColumn == null && (selectedCard.getValue() == 1 || selectedCard.getValue() == 10);
+        
+        if (isInRangeOne || emptyColumnCheck) {
             box.popShownCard();
             columns.addCardToColumn("C" + selectedColumn, selectedCard);
             box.setShownCardState(ShownStateEnum.CLOSED);

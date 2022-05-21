@@ -22,6 +22,19 @@ public class Columns {
                 Card card = (Card) child.getData();
                 String cardValue = String.valueOf(card.getValue());
                 console.setCursor(4 * parentIndex, childIndex + 2);
+                
+                // Print the card with the right color
+                if (card.isSelected()) {
+                	console.print(cardValue, Colors.blueColor);
+                	continue;
+                }
+                
+                if (card.isHighlighted()) {
+                	console.print(cardValue, Colors.cyanColor);
+                	continue;
+                }
+                
+                
                 console.print(cardValue);
             }
         }
@@ -33,6 +46,24 @@ public class Columns {
      * @return
      */
     public Card getLastCardOfColumn(int column) {
+    	if (data.getParentByIndex(column - 1).sizeChild() == 0)
+    		return null;
+    	
+    	
         return (Card) data.getChildByIndex(column - 1, data.getParentByIndex(column - 1).sizeChild() - 1).getData();
+    }
+    
+    public void setSlot(int column, int row, Card newCard) {
+    
+    }
+    
+    /**
+     * 
+     * @param column 1-5
+     * @param row 1-infinite
+     * @return
+     */
+    public Card getSlot(int column, int row) {
+        return (Card) data.getChildByIndex(column - 1, row - 1).getData();
     }
 }

@@ -1,12 +1,13 @@
 public class Card {
     private int value;
     private boolean isHighlighted = false;
+    private boolean isSelected = false;
 
     public Card(int value) {
         this.value = value;
     }
 
-    public boolean getIsHighlighted() {
+    public boolean isHighlighted() {
         return this.isHighlighted;
     }
 
@@ -21,5 +22,13 @@ public class Card {
     public void setValue(int value) {
         this.value = value;
     }
+
+	public boolean isSelected() {
+		return isSelected;
+	}
+
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
+	}
 
 }
