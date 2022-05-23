@@ -1,5 +1,3 @@
 public enum ShownStateEnum {
-    CLOSED,
-    OPENED,
-    SELECTED
+    CLOSED, OPENED, SELECTED
 }

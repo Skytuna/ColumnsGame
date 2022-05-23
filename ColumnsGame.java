@@ -14,7 +14,7 @@ public class ColumnsGame {
         console.console.getTextWindow().addKeyListener(console.klis);
         printStaticScreenElements();
         addSixCardsToEachColumn();
-        columns.getSlot(1, 1).setSelected(true);
+        columns.highlightFirstCard();
 
         while (isGameRunning) {
             printScore();
@@ -23,7 +23,7 @@ public class ColumnsGame {
             printColumnNames();
 
             columns.printColumns();
-            
+
             if (console.isKeyPressed() != -1) {
                 switch (console.rkey) {
                     case KeyEvent.VK_E:
@@ -31,34 +31,47 @@ public class ColumnsGame {
                         break;
                     case KeyEvent.VK_B:
                         box.toggleTopCard();
-                        if (box.getShownCardState() == ShownStateEnum.SELECTED)
+                        if (box.getShownCardState() == ShownStateEnum.SELECTED) {
                             selectedColumn = 1;
+                            columns.resetCardHighlightStates();
+                            break;
+                        }
+
+                        columns.highlightFirstCard();
                         break;
                     case KeyEvent.VK_LEFT:
-                        if (selectedColumn == 1 || selectedColumn == 0)
-                            continue;
-                        selectedColumn--;
+                        if (box.getShownCardState() == ShownStateEnum.SELECTED) {
+                            if (selectedColumn == 1 || selectedColumn == 0)
+                                break;
+                            selectedColumn--;
+                        }
+
+                        columns.moveHighlightedCursor(DirectionsEnum.LEFT);
                         break;
                     case KeyEvent.VK_RIGHT:
-                        if (selectedColumn == 5 || selectedColumn == 0)
-                            continue;
-                        selectedColumn++;
+                        if (box.getShownCardState() == ShownStateEnum.SELECTED) {
+                            if (selectedColumn == 5 || selectedColumn == 0)
+                                break;
+                            selectedColumn++;
+                        }
+                        columns.moveHighlightedCursor(DirectionsEnum.RIGHT);
                         break;
                     case KeyEvent.VK_UP:
+                        columns.moveHighlightedCursor(DirectionsEnum.UP);
                         break;
                     case KeyEvent.VK_DOWN:
+                        columns.moveHighlightedCursor(DirectionsEnum.DOWN);
                         break;
                     case KeyEvent.VK_X:
-                    	if (box.getShownCardState() == ShownStateEnum.SELECTED)
-                    	{
-                    		boxCardValidator();
+                        if (box.getShownCardState() == ShownStateEnum.SELECTED) {
+                            boxCardValidator();
+                            columns.highlightFirstCard();
                             break;
-                    	}
-                    	
-                    	
+                        }
+
                         break;
-                    case KeyEvent.VK_Z://TODO
-                    	columns.getSlot(selectedColumn, score);
+                    case KeyEvent.VK_Z:
+                        columns.getSlot(selectedColumn, score);
                         break;
                 }
             }
@@ -162,9 +175,11 @@ public class ColumnsGame {
         Card lastCardOfColumn = columns.getLastCardOfColumn(selectedColumn);
         Card selectedCard = box.getShownCard();
 
-        boolean isInRangeOne = lastCardOfColumn != null && (Math.abs(lastCardOfColumn.getValue() - selectedCard.getValue()) <= 1);
-        boolean emptyColumnCheck = lastCardOfColumn == null && (selectedCard.getValue() == 1 || selectedCard.getValue() == 10);
-        
+        boolean isInRangeOne = lastCardOfColumn != null
+                && (Math.abs(lastCardOfColumn.getValue() - selectedCard.getValue()) <= 1);
+        boolean emptyColumnCheck = lastCardOfColumn == null
+                && (selectedCard.getValue() == 1 || selectedCard.getValue() == 10);
+
         if (isInRangeOne || emptyColumnCheck) {
             box.popShownCard();
             columns.addCardToColumn("C" + selectedColumn, selectedCard);

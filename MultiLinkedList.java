@@ -78,23 +78,29 @@ public class MultiLinkedList {
     public ChildNode getChildByIndex(int indexParent, int indexChild) {
         ParentNode parent = getParentByIndex(indexParent);
         ChildNode temp = parent.getNextChild();
-        if(indexChild > parent.sizeChild() - 1)
-        {
+        if (indexChild > parent.sizeChild() - 1) {
             return null;
         }
 
-        for(int i = 0; i < indexChild; i++)
-        {
+        for (int i = 0; i < indexChild; i++) {
             temp = temp.getNextChild();
         }
 
         return temp;
     }
-    
-    //TODO I guess
-    public void setChild(int parentIndex, int childIndex, Object child) {
-    	
-    	
-		
-	}
+
+    // TODO: temp.setNext(temp.getNext());
+    public ChildNode deleteChildByIndex(int indexParent, int indexChild) {
+        ParentNode parent = getParentByIndex(indexParent);
+        ChildNode temp = parent.getNextChild();
+        if (indexChild > parent.sizeChild() - 1) {
+            return null;
+        }
+
+        for (int i = 0; i < indexChild; i++) {
+            temp = temp.getNextChild();
+        }
+
+        return temp;
+    }
 }
