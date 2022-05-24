@@ -12,7 +12,7 @@ public class ParentNode {
     public int sizeChild() {
         int count = 0;
         if (nextChild == null) {
-            System.out.println("List is empty!");
+            // System.out.println("List is empty!");
             return count;
         }
 

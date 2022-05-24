@@ -89,18 +89,26 @@ public class MultiLinkedList {
         return temp;
     }
 
-    // TODO: temp.setNext(temp.getNext());
-    public ChildNode deleteChildByIndex(int indexParent, int indexChild) {
+    public void deleteChildByIndex(int indexParent, int indexChild) {
         ParentNode parent = getParentByIndex(indexParent);
         ChildNode temp = parent.getNextChild();
-        if (indexChild > parent.sizeChild() - 1) {
-            return null;
+        if (indexChild > parent.sizeChild() - 1)
+            return;
+
+        if (indexChild == 0) {
+            parent.setNextChild(temp.getNextChild());
+            return;
         }
 
-        for (int i = 0; i < indexChild; i++) {
+        ChildNode previousNode = null;
+        for (int i = 0; i < parent.sizeChild(); i++) {
+            if (i == indexChild) {
+                previousNode.setNextChild(temp.getNextChild());
+                return;
+            }
+
+            previousNode = temp;
             temp = temp.getNextChild();
         }
-
-        return temp;
     }
 }

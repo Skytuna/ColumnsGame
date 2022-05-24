@@ -14,11 +14,14 @@ public class ColumnsGame {
 
     public ColumnsGame() {
         console.console.getTextWindow().addKeyListener(console.klis);
-        printStaticScreenElements();
         addSixCardsToEachColumn();
         columns.highlightFirstCard();
 
         while (isGameRunning) {
+            isBoxCardSelected = box.getShownCardState() == ShownStateEnum.SELECTED;
+            selectedCardExists = columns.selectedCardExists();
+
+            printStaticScreenElements();
             printScore();
             printTransferCount();
             printShownCard();
@@ -26,8 +29,6 @@ public class ColumnsGame {
 
             columns.printColumns();
 
-            isBoxCardSelected = box.getShownCardState() == ShownStateEnum.SELECTED;
-            selectedCardExists = columns.selectedCardExists();
             if (console.isKeyPressed() != -1) {
                 switch (console.rkey) {
                     case KeyEvent.VK_E:
@@ -52,6 +53,7 @@ public class ColumnsGame {
                             if (selectedColumn == 1 || selectedColumn == 0)
                                 break;
                             selectedColumn--;
+                            break;
                         }
                         columns.moveHighlightedCursor(DirectionsEnum.LEFT);
                         break;
@@ -60,13 +62,13 @@ public class ColumnsGame {
                             if (selectedColumn == 5 || selectedColumn == 0)
                                 break;
                             selectedColumn++;
+                            break;
                         }
                         columns.moveHighlightedCursor(DirectionsEnum.RIGHT);
                         break;
                     case KeyEvent.VK_UP:
                         if (isBoxCardSelected || selectedCardExists)
                             break;
-
                         columns.moveHighlightedCursor(DirectionsEnum.UP);
                         break;
                     case KeyEvent.VK_DOWN:
@@ -77,15 +79,27 @@ public class ColumnsGame {
                         break;
                     case KeyEvent.VK_X:
                         if (isBoxCardSelected) {
-                            boxCardValidator();
-                            columns.highlightFirstCard();
+                            boolean safelyTransfered = boxCardValidator();
+                            if (safelyTransfered)
+                                columns.highlightFirstCard();
                             break;
+                        }
+                        if (selectedCardExists) {
+                            boolean safelyTransfered = columns.moveSelectedCardsToColumn(selectedColumn);
+                            if (safelyTransfered) {
+                                transferCount++;
+                                columns.unhighlightAllCards();
+                                columns.unselectAllCards();
+                                columns.highlightFirstCard();
+                            }
                         }
                         break;
                     case KeyEvent.VK_Z:
                         if (isBoxCardSelected)
                             break;
                         if (columns.selectedCardExists()) {
+                            columns.unhighlightAllCards();
+                            columns.highlightFirstCard();
                             columns.unselectAllCards();
                             break;
                         }
@@ -96,7 +110,7 @@ public class ColumnsGame {
             }
 
             try {
-                Thread.sleep(200);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -191,7 +205,7 @@ public class ColumnsGame {
         }
     }
 
-    private void boxCardValidator() {
+    private boolean boxCardValidator() {
         Card lastCardOfColumn = columns.getLastCardOfColumn(selectedColumn);
         Card selectedCard = box.getShownCard();
 
@@ -205,6 +219,9 @@ public class ColumnsGame {
             columns.addCardToColumn("C" + selectedColumn, selectedCard);
             box.setShownCardState(ShownStateEnum.CLOSED);
             transferCount++;
+            return true;
         }
+
+        return false;
     }
 }

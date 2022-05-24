@@ -29,7 +29,7 @@ public class Columns {
                     continue;
                 }
 
-                if (card.isHighlighted() && !selectedCardExists()) {
+                if (card.isHighlighted()) {
                     console.print(cardValue, Colors.cyanColor);
                     continue;
                 }
@@ -66,8 +66,13 @@ public class Columns {
     }
 
     public void highlightFirstCard() {
-        // TODO: kart var mı diye çek et yoksa sütunları iterate et
-        getSlot(1, 1).setIsHighlighted(true);
+        for (int column = 1; column <= 5; column++) {
+            ParentNode parent = data.getParentByIndex(column - 1);
+            if (parent.getNextChild() == null)
+                continue;
+            getSlot(column, 1).setIsHighlighted(true);
+            break;
+        }
     }
 
     public void resetCardHighlightStates() {
@@ -161,6 +166,21 @@ public class Columns {
         return null;
     }
 
+    public Card getHighlightedCard() {
+        for (int parentIndex = 0; parentIndex < 5; parentIndex++) {
+            ParentNode parent = data.getParentByIndex(parentIndex);
+            for (int childIndex = 0; childIndex < parent.sizeChild(); childIndex++) {
+                ChildNode child = data.getChildByIndex(parentIndex, childIndex);
+                Card card = (Card) child.getData();
+
+                if (card.isHighlighted())
+                    return card;
+            }
+        }
+
+        return null;
+    }
+
     public boolean selectedCardExists() {
         for (int parentIndex = 0; parentIndex < 5; parentIndex++) {
             ParentNode parent = data.getParentByIndex(parentIndex);
@@ -219,5 +239,38 @@ public class Columns {
                     card.setSelected(true);
             }
         }
+    }
+
+    public boolean moveSelectedCardsToColumn(int selectedColumn) {
+        Card lastCardOfColumn = getLastCardOfColumn(selectedColumn);
+        Card highlightedCard = getHighlightedCard();
+        int[] highlightedCardCoords = getHighlightedCardCoords();
+        int x = highlightedCardCoords[0], y = highlightedCardCoords[1];
+        if (x + 1 == selectedColumn)
+            return false;
+
+        boolean isInRangeOne = lastCardOfColumn != null
+                && (Math.abs(lastCardOfColumn.getValue() - highlightedCard.getValue()) <= 1);
+        boolean emptyColumnCheck = lastCardOfColumn == null
+                && (highlightedCard.getValue() == 1 || highlightedCard.getValue() == 10);
+
+        if (isInRangeOne || emptyColumnCheck) {
+            // Add selected cards to the new column
+            for (int currentRow = y + 1; currentRow < data.getParentByIndex(x).sizeChild() + 1; currentRow++) {
+                Card cardToMove = getSlot(x + 1, currentRow);
+                data.addChildNode("C" + selectedColumn, cardToMove);
+            }
+
+            // Delete old cards from the old column
+            for (int currentRow = data.getParentByIndex(x).sizeChild() + 1; currentRow >= 0; currentRow--) {
+                data.deleteChildByIndex(x, y);
+                console.setCursor(4 * x, currentRow + 2);
+                console.print("  ");
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
