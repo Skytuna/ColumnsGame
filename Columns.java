@@ -25,11 +25,11 @@ public class Columns {
 
                 // Print the card with the right color
                 if (card.isSelected()) {
-                    console.print(cardValue, Colors.orangeColor);
+                    console.print(cardValue, Colors.blueColor);
                     continue;
                 }
 
-                if (card.isHighlighted()) {
+                if (card.isHighlighted() && !selectedCardExists()) {
                     console.print(cardValue, Colors.cyanColor);
                     continue;
                 }
@@ -115,12 +115,31 @@ public class Columns {
                 if (x == 0)
                     return;
 
-                for (int i = x; i != 0; i--) {
+                for (int i = x - 1; i >= 0; i--) {
                     if (data.getChildByIndex(i, 0) == null)
                         continue;
+
+                    prevCard = getSlot(x + 1, y + 1);
+                    newCard = getSlot(1 + i, 1);
+                    prevCard.setIsHighlighted(false);
+                    newCard.setIsHighlighted(true);
+                    return;
                 }
                 return;
             case RIGHT:
+                if (x == 4)
+                    return;
+
+                for (int i = x + 1; i <= 4; i++) {
+                    if (data.getChildByIndex(i, 0) == null)
+                        continue;
+
+                    prevCard = getSlot(x + 1, y + 1);
+                    newCard = getSlot(1 + i, 1);
+                    prevCard.setIsHighlighted(false);
+                    newCard.setIsHighlighted(true);
+                    return;
+                }
                 return;
         }
     }
@@ -140,5 +159,65 @@ public class Columns {
         }
 
         return null;
+    }
+
+    public boolean selectedCardExists() {
+        for (int parentIndex = 0; parentIndex < 5; parentIndex++) {
+            ParentNode parent = data.getParentByIndex(parentIndex);
+            for (int childIndex = 0; childIndex < parent.sizeChild(); childIndex++) {
+                ChildNode child = data.getChildByIndex(parentIndex, childIndex);
+                Card card = (Card) child.getData();
+
+                if (card.isSelected())
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public void unselectAllCards() {
+        for (int parentIndex = 0; parentIndex < 5; parentIndex++) {
+            ParentNode parent = data.getParentByIndex(parentIndex);
+            for (int childIndex = 0; childIndex < parent.sizeChild(); childIndex++) {
+                ChildNode child = data.getChildByIndex(parentIndex, childIndex);
+                Card card = (Card) child.getData();
+                card.setSelected(false);
+            }
+        }
+    }
+
+    public void unhighlightAllCards() {
+        for (int parentIndex = 0; parentIndex < 5; parentIndex++) {
+            ParentNode parent = data.getParentByIndex(parentIndex);
+            for (int childIndex = 0; childIndex < parent.sizeChild(); childIndex++) {
+                ChildNode child = data.getChildByIndex(parentIndex, childIndex);
+                Card card = (Card) child.getData();
+                card.setIsHighlighted(false);
+            }
+        }
+    }
+
+    /**
+     * @note "selectionFlag" is a boolean value that helps us mark the cards for
+     *       those are under the highlighted card
+     */
+    public void selectCardsBelow() {
+        for (int parentIndex = 0; parentIndex < 5; parentIndex++) {
+            ParentNode parent = data.getParentByIndex(parentIndex);
+            boolean selectionFlag = false;
+            for (int childIndex = 0; childIndex < parent.sizeChild(); childIndex++) {
+                ChildNode child = data.getChildByIndex(parentIndex, childIndex);
+                Card card = (Card) child.getData();
+
+                if (card.isHighlighted()) {
+                    selectionFlag = true;
+                    card.setSelected(true);
+                    continue;
+                }
+
+                if (selectionFlag)
+                    card.setSelected(true);
+            }
+        }
     }
 }

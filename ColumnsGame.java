@@ -9,6 +9,8 @@ public class ColumnsGame {
     private EnigmaExtended console = new EnigmaExtended();
     private boolean isGameRunning = true;
     private int selectedColumn = 0; // 0 means no selected column
+    private boolean isBoxCardSelected;
+    private boolean selectedCardExists;
 
     public ColumnsGame() {
         console.console.getTextWindow().addKeyListener(console.klis);
@@ -24,32 +26,37 @@ public class ColumnsGame {
 
             columns.printColumns();
 
+            isBoxCardSelected = box.getShownCardState() == ShownStateEnum.SELECTED;
+            selectedCardExists = columns.selectedCardExists();
             if (console.isKeyPressed() != -1) {
                 switch (console.rkey) {
                     case KeyEvent.VK_E:
                         isGameRunning = false;
                         break;
                     case KeyEvent.VK_B:
+                        if (selectedCardExists)
+                            break;
+
+                        columns.resetCardHighlightStates();
                         box.toggleTopCard();
-                        if (box.getShownCardState() == ShownStateEnum.SELECTED) {
+                        isBoxCardSelected = box.getShownCardState() == ShownStateEnum.SELECTED;
+                        if (isBoxCardSelected) {
                             selectedColumn = 1;
                             columns.resetCardHighlightStates();
                             break;
                         }
-
                         columns.highlightFirstCard();
                         break;
                     case KeyEvent.VK_LEFT:
-                        if (box.getShownCardState() == ShownStateEnum.SELECTED) {
+                        if (isBoxCardSelected || selectedCardExists) {
                             if (selectedColumn == 1 || selectedColumn == 0)
                                 break;
                             selectedColumn--;
                         }
-
                         columns.moveHighlightedCursor(DirectionsEnum.LEFT);
                         break;
                     case KeyEvent.VK_RIGHT:
-                        if (box.getShownCardState() == ShownStateEnum.SELECTED) {
+                        if (isBoxCardSelected || selectedCardExists) {
                             if (selectedColumn == 5 || selectedColumn == 0)
                                 break;
                             selectedColumn++;
@@ -57,27 +64,39 @@ public class ColumnsGame {
                         columns.moveHighlightedCursor(DirectionsEnum.RIGHT);
                         break;
                     case KeyEvent.VK_UP:
+                        if (isBoxCardSelected || selectedCardExists)
+                            break;
+
                         columns.moveHighlightedCursor(DirectionsEnum.UP);
                         break;
                     case KeyEvent.VK_DOWN:
+                        if (isBoxCardSelected || selectedCardExists)
+                            break;
+
                         columns.moveHighlightedCursor(DirectionsEnum.DOWN);
                         break;
                     case KeyEvent.VK_X:
-                        if (box.getShownCardState() == ShownStateEnum.SELECTED) {
+                        if (isBoxCardSelected) {
                             boxCardValidator();
                             columns.highlightFirstCard();
                             break;
                         }
-
                         break;
                     case KeyEvent.VK_Z:
-                        columns.getSlot(selectedColumn, score);
+                        if (isBoxCardSelected)
+                            break;
+                        if (columns.selectedCardExists()) {
+                            columns.unselectAllCards();
+                            break;
+                        }
+                        selectedColumn = 1;
+                        columns.selectCardsBelow();
                         break;
                 }
             }
 
             try {
-                Thread.sleep(175);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -162,7 +181,8 @@ public class ColumnsGame {
     private void printColumnNames() {
         console.setCursor(0, 0);
         for (int i = 1; i < 6; i++) {
-            if (i == selectedColumn && box.getShownCardState() == ShownStateEnum.SELECTED) {
+            if (i == selectedColumn
+                    && (isBoxCardSelected || selectedCardExists)) {
                 console.print("C" + i, Colors.orangeColor);
                 console.print("  ");
                 continue;
