@@ -273,4 +273,101 @@ public class Columns {
 
         return false;
     }
+    
+    /**
+     * 
+     * Checks whether there is a match. If there is, returns its coords.
+     * @return coords, if there is no match then null
+     */
+    public int[] findMatch()
+    {
+        for (int parentIndex = 0; parentIndex < 5; parentIndex++) {
+            ParentNode parent = data.getParentByIndex(parentIndex);
+            int matchCounter = 0;//if matchCounter hits 10, this means there is a match
+            int matchStarter = 0;//0 if no match starter (0 or 10) found
+            
+        	ChildNode prevChild = data.getChildByIndex(parentIndex, 0);
+        	if(prevChild == null)
+        		continue;
+        	
+        	Card prevCard = (Card)prevChild.getData();
+        	
+            if (prevCard.getValue() == 1) {
+                matchCounter = 1;
+                matchStarter = 1;
+            }
+
+            if (prevCard.getValue() == 10) {
+                matchCounter = 1;
+                matchStarter = 10;
+            }
+            
+            for (int childIndex = 1; childIndex < parent.sizeChild(); childIndex++) {
+            	prevChild = data.getChildByIndex(parentIndex, childIndex-1);
+            	prevCard = (Card)prevChild.getData();
+                ChildNode child = data.getChildByIndex(parentIndex, childIndex);
+                Card card = (Card) child.getData();
+
+                if(matchStarter == 1)
+                {
+                	if((card.getValue() == prevCard.getValue() + 1))
+                	{
+                		matchCounter++;
+                		
+                        if(matchCounter == 10)
+                        {
+                        	int[] coords = {parentIndex, childIndex - 9};
+                        	return coords;
+                        }
+                		
+                		continue;
+                	}
+                	
+                	matchCounter = 0;
+                	matchStarter = 0;
+                }
+                
+                if(matchStarter == 10)
+                {
+                	if((card.getValue() == prevCard.getValue() - 1))
+                	{
+                		matchCounter++;
+                        
+                		if(matchCounter == 10)
+                        {
+                        	int[] coords = {parentIndex, childIndex - 9};
+                        	return coords;
+                        }
+                        
+                		continue;
+                	}
+                	
+                	matchCounter = 0;
+                	matchStarter = 0;
+                }
+                
+                if (card.getValue() == 1) {
+                    matchCounter = 1;
+                    matchStarter = 1;
+                    continue;
+                }
+
+                if (card.getValue() == 10) {
+                    matchCounter = 1;
+                    matchStarter = 10;
+                    continue;
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    public void deleteMatch(int x, int y)
+    {
+    	for(int i = 0; i < 10; i++)
+    	{
+    		data.deleteChildByIndex(x, y);
+    	}
+    }
 }
