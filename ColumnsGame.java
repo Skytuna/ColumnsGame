@@ -26,6 +26,7 @@ public class ColumnsGame {
             printTransferCount();
             printShownCard();
             printColumnNames();
+            printCardCountInsideBox();
 
             columns.printColumns();
 
@@ -162,6 +163,12 @@ public class ColumnsGame {
         console.print(scoreAsString);
     }
 
+    private void printCardCountInsideBox() {
+        String cardCount = String.valueOf(box.getCardsSize());
+        console.setCursor(40, 8);
+        console.print(cardCount);
+    }
+
     private void printTransferCount() {
         String transferCountAsString = String.valueOf(transferCount);
         console.setCursor(40 - transferCountAsString.length(), 0);
@@ -207,6 +214,10 @@ public class ColumnsGame {
         console.print("|  |");
         console.setCursor(28, 7);
         console.print("+--+");
+
+        // card count inside the box
+        console.setCursor(28, 8);
+        console.print("Card Count:");
     }
 
     private void printColumnNames() {
