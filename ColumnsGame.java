@@ -2,7 +2,7 @@ import java.awt.event.KeyEvent;
 
 public class ColumnsGame {
     private int transferCount = 0;
-    private int score = 0;
+    private float score = 0;
     private Box box = new Box();
     private Columns columns = new Columns();
     private HighScoreTable highScoreTable = new HighScoreTable();
@@ -20,7 +20,7 @@ public class ColumnsGame {
         while (isGameRunning) {
             isBoxCardSelected = box.getShownCardState() == ShownStateEnum.SELECTED;
             selectedCardExists = columns.selectedCardExists();
-
+            
             printStaticScreenElements();
             printScore();
             printTransferCount();
@@ -80,8 +80,17 @@ public class ColumnsGame {
                     case KeyEvent.VK_X:
                         if (isBoxCardSelected) {
                             boolean safelyTransfered = boxCardValidator();
-                            if (safelyTransfered)
-                                columns.highlightFirstCard();
+                            if (safelyTransfered){
+                            	
+                            	int[] coords = columns.findMatch();
+                            	if(coords != null){
+                            		columns.deleteMatch(coords[0], coords[1]);
+                            		score += 1000;
+                            		console.clearConsole();
+                            	}
+                            		
+                            	columns.highlightFirstCard();
+                            }
                             break;
                         }
                         if (selectedCardExists) {
@@ -90,6 +99,14 @@ public class ColumnsGame {
                                 transferCount++;
                                 columns.unhighlightAllCards();
                                 columns.unselectAllCards();
+                                
+                                int[] coords = columns.findMatch();
+                            	if(coords != null){
+                            		columns.deleteMatch(coords[0], coords[1]);
+                            		score += 1000;
+                            		console.clearConsole();
+                            	}
+                                
                                 columns.highlightFirstCard();
                             }
                         }
