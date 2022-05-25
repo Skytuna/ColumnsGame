@@ -110,6 +110,7 @@ public class ColumnsGame {
                                 if (coords != null) {
                                     columns.deleteMatch(coords[0], coords[1]);
                                     score += 1000;
+                                    finishedSetCount++;
                                     console.clearConsole();
                                 }
 
