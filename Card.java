@@ -23,12 +23,12 @@ public class Card {
         this.value = value;
     }
 
-	public boolean isSelected() {
-		return isSelected;
-	}
+    public boolean isSelected() {
+        return isSelected;
+    }
 
-	public void setSelected(boolean isSelected) {
-		this.isSelected = isSelected;
-	}
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
 
 }

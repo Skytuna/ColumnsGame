@@ -20,7 +20,7 @@ public class ColumnsGame {
         while (isGameRunning) {
             isBoxCardSelected = box.getShownCardState() == ShownStateEnum.SELECTED;
             selectedCardExists = columns.selectedCardExists();
-            
+
             printStaticScreenElements();
             printScore();
             printTransferCount();
@@ -80,16 +80,16 @@ public class ColumnsGame {
                     case KeyEvent.VK_X:
                         if (isBoxCardSelected) {
                             boolean safelyTransfered = boxCardValidator();
-                            if (safelyTransfered){
-                            	
-                            	int[] coords = columns.findMatch();
-                            	if(coords != null){
-                            		columns.deleteMatch(coords[0], coords[1]);
-                            		score += 1000;
-                            		console.clearConsole();
-                            	}
-                            		
-                            	columns.highlightFirstCard();
+                            if (safelyTransfered) {
+
+                                int[] coords = columns.findMatch();
+                                if (coords != null) {
+                                    columns.deleteMatch(coords[0], coords[1]);
+                                    score += 1000;
+                                    console.clearConsole();
+                                }
+
+                                columns.highlightFirstCard();
                             }
                             break;
                         }
@@ -99,14 +99,14 @@ public class ColumnsGame {
                                 transferCount++;
                                 columns.unhighlightAllCards();
                                 columns.unselectAllCards();
-                                
+
                                 int[] coords = columns.findMatch();
-                            	if(coords != null){
-                            		columns.deleteMatch(coords[0], coords[1]);
-                            		score += 1000;
-                            		console.clearConsole();
-                            	}
-                                
+                                if (coords != null) {
+                                    columns.deleteMatch(coords[0], coords[1]);
+                                    score += 1000;
+                                    console.clearConsole();
+                                }
+
                                 columns.highlightFirstCard();
                             }
                         }
