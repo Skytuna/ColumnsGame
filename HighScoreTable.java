@@ -41,7 +41,7 @@ public class HighScoreTable {
             Player player = (Player) node.getData();
             String name = player.getName();
             float score = player.getScore();
-            console.setCursor(2, 15 + i);
+            console.setCursor(2, i);
             console.print(name + " " + score);
         }
     }

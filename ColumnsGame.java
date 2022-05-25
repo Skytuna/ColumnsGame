@@ -2,6 +2,7 @@ import java.awt.event.KeyEvent;
 
 public class ColumnsGame {
     private int transferCount = 0;
+    private int finishedSetCount = 0;
     private float score = 0;
     private Box box = new Box();
     private Columns columns = new Columns();
@@ -18,6 +19,9 @@ public class ColumnsGame {
         columns.highlightFirstCard();
 
         while (isGameRunning) {
+            if (box.getCardsSize() == 0 && !columns.isAnyCardsLeft())
+                break;
+
             isBoxCardSelected = box.getShownCardState() == ShownStateEnum.SELECTED;
             selectedCardExists = columns.selectedCardExists();
 
@@ -87,6 +91,7 @@ public class ColumnsGame {
                                 if (coords != null) {
                                     columns.deleteMatch(coords[0], coords[1]);
                                     score += 1000;
+                                    finishedSetCount++;
                                     console.clearConsole();
                                 }
 
@@ -135,14 +140,15 @@ public class ColumnsGame {
         }
 
         console.clearConsole();
-        console.print("Game is over!\n");
+        float playerScore = (100 * finishedSetCount) + (score / transferCount);
+        console.print("Game is over! Your score is: " + playerScore + "\n");
         console.print("Please enter your name:");
         String playerName = console.console.readLine();
+        console.clearConsole();
 
-        // Mock player
-        Player player = new Player(playerName, 243.2f);
+        // Print highscore screen
+        Player player = new Player(playerName, playerScore);
         highScoreTable.addNewPlayer(player);
-
         highScoreTable.printHighScore();
         highScoreTable.saveToFile();
     }
