@@ -361,4 +361,12 @@ public class Columns {
             data.deleteChildByIndex(x, y);
         }
     }
+
+    public boolean isAnyCardsLeft() {
+        for (int parentIndex = 0; parentIndex < 5; parentIndex++) {
+            if (data.getParentByIndex(parentIndex).sizeChild() != 0)
+                return true;
+        }
+        return false;
+    }
 }
