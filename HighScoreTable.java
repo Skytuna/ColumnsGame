@@ -35,13 +35,14 @@ public class HighScoreTable {
     }
 
     public void printHighScore() {
+        console.print("----High Score Table----");
         int length = data.size();
         for (int i = 0; i < length; i++) {
             DoubleNode node = data.getIndex(i);
             Player player = (Player) node.getData();
             String name = player.getName();
             float score = player.getScore();
-            console.setCursor(2, i);
+            console.setCursor(2, i + 1);
             console.print(name + " " + score);
         }
     }

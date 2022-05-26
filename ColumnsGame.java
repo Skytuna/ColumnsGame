@@ -141,7 +141,7 @@ public class ColumnsGame {
         }
 
         console.clearConsole();
-        float playerScore = (100 * finishedSetCount) + (score / transferCount);
+        float playerScore = transferCount == 0 ? 0 : (100 * finishedSetCount) + (score / transferCount);
         console.print("Game is over! Your score is: " + playerScore + "\n");
         console.print("Please enter your name:");
         String playerName = console.console.readLine();
